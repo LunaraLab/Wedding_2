@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Arjun & Meher — Wedding Invitation</title>
+<meta name="description" content="Join Arjun and Meher as they begin their forever — wedding dates, itinerary, venue and RSVP.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ivory: { DEFAULT: '#FBF6EC', 50: '#FFFDF9', 100: '#FBF6EC', 200: '#F3EAD6' },
+          ink: { DEFAULT: '#2B2118', 700: '#3A2E20' },
+          emerald: { 600: '#146B4F', 700: '#0F4C3A', 800: '#0B3D2E', 900: '#082C21' },
+          burgundy: { 500: '#8C1D3F', 600: '#7A1330', 700: '#5E0F25', 800: '#490B1D' },
+          gold: { 300: '#E7D3A1', 400: '#D4AF6A', 500: '#C6A15B', 600: '#A9822F', 700: '#8A6A2F' },
+        },
+        fontFamily: {
+          serif: ['Cinzel', 'serif'],
+          sans: ['Inter', 'sans-serif'],
+        },
+        boxShadow: {
+          soft: '0 10px 40px -12px rgba(43, 33, 24, 0.25)',
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    overflow-x: hidden;
+    scroll-snap-type: y proximity;
+    background-color: #FBF6EC;
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(198,161,91,0.10), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(15,76,58,0.08), transparent 45%);
+  }
+  section { scroll-snap-align: start; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1); }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1.in-view { transition-delay: .12s; }
+  .reveal-delay-2.in-view { transition-delay: .24s; }
+  .reveal-delay-3.in-view { transition-delay: .36s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-delay-1, .reveal-delay-2, .reveal-delay-3 { transition: none !important; opacity: 1 !important; transform: none !important; }
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  }
+
+  .gold-frame {
+    position: relative;
+    border: 1px solid rgba(198,161,91,0.55);
+  }
+  .gold-frame::before {
+    content: '';
+    position: absolute; inset: 6px;
+    border: 1px solid rgba(198,161,91,0.35);
+    pointer-events: none;
+  }
+
+  .text-gold-foil {
+    background: linear-gradient(120deg, #8A6A2F 0%, #E7D3A1 28%, #C6A15B 50%, #E7D3A1 72%, #8A6A2F 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+  #scrollProgress {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg, #A9822F, #E7D3A1, #A9822F);
+    z-index: 60; transition: width 0.1s linear;
+  }
+
+  input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 2px solid #A9822F; outline-offset: 2px;
+  }
+
+  .paisley-divider { display:flex; align-items:center; justify-content:center; gap:0.75rem; }
+  .paisley-divider .line { height:1px; width:2.5rem; background: linear-gradient(90deg, transparent, currentColor); opacity:0.55; }
+  .paisley-divider .line.reverse { background: linear-gradient(270deg, transparent, currentColor); }
+
+  /* ---------- Preloader ---------- */
+  body.is-loading { overflow: hidden; }
+  #preloader {
+    transition: opacity .7s ease;
+  }
+  #preloader.loaded { opacity: 0; pointer-events: none; }
+  #heartGlow {
+    animation: glowPulse 1.8s ease-in-out infinite;
+  }
+  #heartPath {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: drawHeart 1.5s ease forwards .1s;
+  }
+  #preloaderText {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: fadeInUp .9s ease forwards 1.3s;
+  }
+  #preloaderSub {
+    opacity: 0;
+    animation: fadeInUp .9s ease forwards 1.6s;
+  }
+  @keyframes drawHeart { to { stroke-dashoffset: 0; } }
+  @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes glowPulse {
+    0%, 100% { opacity: .35; transform: scale(1); }
+    50% { opacity: .7; transform: scale(1.12); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #heartPath { animation: none; stroke-dashoffset: 0; }
+    #preloaderText, #preloaderSub { animation: none; opacity: 1; transform: none; }
+    #heartGlow { animation: none; }
+  }
+</style>
+</head>
+
+<body class="text-ink font-sans antialiased is-loading">
+
+<!-- Preloader: gold heart line-art draws itself, joining the couple's names -->
+<div id="preloader" class="fixed inset-0 z-[100] bg-ivory flex flex-col items-center justify-center">
+  <div class="relative flex items-center justify-center">
+    <div id="heartGlow" class="absolute w-24 h-24 rounded-full bg-gold-400/40 blur-2xl"></div>
+    <svg viewBox="0 0 100 90" class="relative w-16 h-16 sm:w-20 sm:h-20 text-gold-500" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path id="heartPath" d="M50 82 C 20 60, 4 40, 4 24 C 4 10, 15 3, 27 3 C 38 3, 46 9, 50 19 C 54 9, 62 3, 73 3 C 85 3, 96 10, 96 24 C 96 40, 80 60, 50 82 Z"/>
+    </svg>
+  </div>
+  <p id="preloaderText" class="mt-5 font-serif text-emerald-800 tracking-[0.25em] text-sm sm:text-base">Arjun &amp; Meher</p>
+  <p id="preloaderSub" class="mt-1.5 font-sans text-[11px] tracking-[0.2em] text-gold-600 uppercase">Two hearts, joining</p>
+</div>
+
+<div id="scrollProgress"></div>
+
+<!-- Music toggle -->
+<button id="musicToggle" aria-label="Play background music" aria-pressed="false"
+  class="fixed top-4 right-4 z-50 h-11 w-11 rounded-full bg-ivory/90 backdrop-blur border border-gold-500/50 shadow-soft flex items-center justify-center text-emerald-800 hover:scale-105 active:scale-95 transition">
+  <svg id="iconPlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+    <path d="M8 5.14v13.72c0 .81.91 1.29 1.57.83l10.86-6.86a1 1 0 0 0 0-1.66L9.57 4.31C8.91 3.85 8 4.33 8 5.14Z"/>
+  </svg>
+  <svg id="iconPause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hidden">
+    <path d="M7 5h3v14H7zM14 5h3v14h-3z"/>
+  </svg>
+</button>
+<audio id="bgAudio" loop preload="none">
+  <source src="audio/wedding-instrumental.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ============ 1. HOME / COVER ============ -->
+<section id="home" class="relative min-h-screen flex items-end">
+  <div class="absolute inset-0 -z-10 bg-gradient-to-br from-emerald-900 via-ink to-burgundy-800">
+    <!-- HERO PHOTO PLACEHOLDER — swap the src below for your own couple photo -->
+    <img src="REPLACE-WITH-YOUR-HERO-PHOTO.jpg"
+      alt="Placeholder — replace with a photo of the couple"
+      class="w-full h-full object-cover opacity-60"
+      onerror="this.style.display='none'">
+
+    <!-- decorative watermark shown only while no real photo is set -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9"
+        class="w-40 h-40 text-gold-300/20">
+        <path d="M12 20s-7-4.6-9.3-9.1C1.2 7.8 3 5 6 5c2 0 3.3 1.1 4 2.4C10.7 6.1 12 5 14 5c3 0 4.8 2.8 3.3 5.9C15 15.4 12 20 12 20Z"/>
+      </svg>
+    </div>
+
+    <!-- small reminder badge — remove once a real photo is in place -->
+    <div class="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 rounded-full border border-dashed border-gold-400/60 bg-ink/50 backdrop-blur px-3 py-1.5 text-[10px] tracking-wide text-gold-300/90">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="w-3.5 h-3.5">
+        <rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-3h5L16 7"/><circle cx="12" cy="13.5" r="3.2"/>
+      </svg>
+      Replace with your photo
+    </div>
+
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/40 to-ink/90"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/50 via-transparent to-transparent"></div>
+  </div>
+
+  <!-- corner flourishes -->
+  <svg class="absolute top-6 left-6 w-16 h-16 text-gold-400/80" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.4">
+    <path d="M4 4 C 4 40, 40 4, 4 40 M4 4 H30 M4 4 V30"/>
+    <circle cx="4" cy="4" r="2.2" fill="currentColor" stroke="none"/>
+  </svg>
+  <svg class="absolute top-6 right-6 w-16 h-16 text-gold-400/80 -scale-x-100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.4">
+    <path d="M4 4 C 4 40, 40 4, 4 40 M4 4 H30 M4 4 V30"/>
+    <circle cx="4" cy="4" r="2.2" fill="currentColor" stroke="none"/>
+  </svg>
+
+  <div class="relative w-full px-6 pb-16 pt-32 text-ivory">
+    <div class="max-w-md mx-auto text-center">
+      <p class="reveal font-serif tracking-[0.18em] text-gold-300 text-xs sm:text-sm mb-5">|| Shree Ganeshay Namah ||</p>
+
+      <p class="reveal reveal-delay-1 font-sans text-sm sm:text-base text-ivory/85 mb-3">Together with their families</p>
+
+      <h1 class="reveal reveal-delay-1 font-serif text-[2.6rem] leading-[1.05] sm:text-6xl text-gold-foil drop-shadow-sm">
+        Arjun<span class="block text-2xl sm:text-3xl my-2 text-ivory/70 font-sans font-light tracking-widest">&amp;</span>Meher
+      </h1>
+
+      <p class="reveal reveal-delay-2 font-sans text-sm sm:text-base text-ivory/85 mt-6 leading-relaxed">
+        Two families, one beginning. We would be honoured to have you beside us
+        as we step into forever — with laughter, a little chaos, and a lot of love.
+      </p>
+
+      <div class="reveal reveal-delay-3 paisley-divider text-gold-400 mt-8 mb-2">
+        <span class="line"></span>
+        <span class="font-serif text-xs tracking-[0.3em]">12 · 12 · 2026</span>
+        <span class="line reverse"></span>
+      </div>
+    </div>
+  </div>
+
+  <a href="#itinerary" aria-label="Scroll to next section"
+    class="absolute bottom-5 left-1/2 -translate-x-1/2 text-gold-300 animate-bounce">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</section>
+
+<!-- ============ 2. DATE / TIME / ITINERARY ============ -->
+<section id="itinerary" class="relative bg-emerald-900 text-ivory py-20 px-6">
+  <div class="max-w-md mx-auto">
+    <p class="reveal text-center font-sans text-xs tracking-[0.25em] text-gold-300 mb-2">save these moments</p>
+    <h2 class="reveal font-serif text-3xl text-center mb-10">The Celebration Days</h2>
+
+    <!-- countdown -->
+    <div class="reveal grid grid-cols-4 gap-2 mb-14" id="countdown" aria-live="polite">
+      <div class="gold-frame rounded-lg bg-emerald-800/60 py-3 text-center">
+        <div class="font-serif text-2xl" id="cd-days">00</div>
+        <div class="text-[10px] tracking-widest text-gold-300 mt-1">DAYS</div>
+      </div>
+      <div class="gold-frame rounded-lg bg-emerald-800/60 py-3 text-center">
+        <div class="font-serif text-2xl" id="cd-hours">00</div>
+        <div class="text-[10px] tracking-widest text-gold-300 mt-1">HRS</div>
+      </div>
+      <div class="gold-frame rounded-lg bg-emerald-800/60 py-3 text-center">
+        <div class="font-serif text-2xl" id="cd-mins">00</div>
+        <div class="text-[10px] tracking-widest text-gold-300 mt-1">MIN</div>
+      </div>
+      <div class="gold-frame rounded-lg bg-emerald-800/60 py-3 text-center">
+        <div class="font-serif text-2xl" id="cd-secs">00</div>
+        <div class="text-[10px] tracking-widest text-gold-300 mt-1">SEC</div>
+      </div>
+    </div>
+
+    <!-- timeline -->
+    <ol class="space-y-5">
+      <li class="reveal flex gap-4">
+        <div class="flex flex-col items-center pt-1">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span>
+          <span class="w-px flex-1 bg-gold-500/40 mt-1"></span>
+        </div>
+        <div class="pb-2 flex-1">
+          <p class="font-serif text-lg">Haldi &amp; Mehendi</p>
+          <p class="text-sm text-ivory/75 mt-1">Thu, 10 Dec 2026 · 10:00 AM · Courtyard Lawns</p>
+          <p class="text-xs text-gold-300 mt-1">Dress code: Yellow &amp; green, festive &amp; comfortable</p>
+        </div>
+      </li>
+      <li class="reveal flex gap-4">
+        <div class="flex flex-col items-center pt-1">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span>
+          <span class="w-px flex-1 bg-gold-500/40 mt-1"></span>
+        </div>
+        <div class="pb-2 flex-1">
+          <p class="font-serif text-lg">Sangeet Night</p>
+          <p class="text-sm text-ivory/75 mt-1">Fri, 11 Dec 2026 · 7:00 PM · Banquet Hall</p>
+          <p class="text-xs text-gold-300 mt-1">Dress code: Shimmer &amp; sequins</p>
+        </div>
+      </li>
+      <li class="reveal flex gap-4">
+        <div class="flex flex-col items-center pt-1">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span>
+          <span class="w-px flex-1 bg-gold-500/40 mt-1"></span>
+        </div>
+        <div class="pb-2 flex-1">
+          <p class="font-serif text-lg">Muhurtham &amp; Varmala</p>
+          <p class="text-sm text-ivory/75 mt-1">Sat, 12 Dec 2026 · 7:30 AM · Main Mandap</p>
+          <p class="text-xs text-gold-300 mt-1">Dress code: Traditional silks</p>
+        </div>
+      </li>
+      <li class="reveal flex gap-4">
+        <div class="flex flex-col items-center pt-1">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span>
+        </div>
+        <div class="flex-1">
+          <p class="font-serif text-lg">Reception</p>
+          <p class="text-sm text-ivory/75 mt-1">Sat, 12 Dec 2026 · 7:00 PM · Grand Ballroom</p>
+          <p class="text-xs text-gold-300 mt-1">Dress code: Evening elegance</p>
+        </div>
+      </li>
+    </ol>
+
+    <a id="gcalBtn" href="#" target="_blank" rel="noopener"
+      class="reveal mt-10 flex items-center justify-center gap-2 w-full rounded-full border border-gold-400 text-gold-300 py-3 text-sm tracking-wide hover:bg-gold-400 hover:text-emerald-900 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18" stroke-linecap="round"/>
+      </svg>
+      Add Muhurtham to Google Calendar
+    </a>
+  </div>
+</section>
+
+<!-- ============ 3. STORY & GALLERY ============ -->
+<section id="story" class="relative bg-ivory py-20 px-6">
+  <div class="max-w-md mx-auto">
+    <p class="reveal text-center font-sans text-xs tracking-[0.25em] text-burgundy-600 mb-2">how it began</p>
+    <h2 class="reveal font-serif text-3xl text-center text-ink mb-12">Our Story</h2>
+
+    <div class="space-y-8 mb-14">
+      <p class="reveal font-serif text-xl leading-relaxed text-ink/85 text-center">
+        "It started with a shared plate of chaat and a heated debate over which stall was better —
+        nothing has been quiet since."
+      </p>
+      <div class="paisley-divider text-gold-600"><span class="line"></span><span class="line reverse"></span></div>
+      <p class="reveal font-serif text-xl leading-relaxed text-ink/85 text-center">
+        "Four years, two cities, one unmistakable certainty."
+      </p>
+      <div class="paisley-divider text-gold-600"><span class="line"></span><span class="line reverse"></span></div>
+      <p class="reveal font-serif text-xl leading-relaxed text-ink/85 text-center">
+        "We chose each other quietly, a hundred ordinary days ago.
+        Now we get to choose each other loudly, in front of everyone we love."
+      </p>
+    </div>
+
+    <!-- gallery -->
+    <div class="grid grid-cols-2 gap-3">
+      <button class="reveal gallery-item col-span-2 group relative rounded-2xl overflow-hidden shadow-soft h-56" data-full="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Close-up of wedding rings" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.parentElement.classList.add('bg-gradient-to-br','from-emerald-700','to-burgundy-700')">
+      </button>
+      <button class="reveal gallery-item group relative rounded-2xl overflow-hidden shadow-soft h-40" data-full="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1200&q=80">
+        <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80" alt="Bride's hands with mehendi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.parentElement.classList.add('bg-gradient-to-br','from-gold-500','to-burgundy-700')">
+      </button>
+      <button class="reveal gallery-item group relative rounded-2xl overflow-hidden shadow-soft h-40" data-full="https://images.unsplash.com/photo-1465495976277-4387d4b0dbbf?w=1200&q=80">
+        <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0dbbf?w=600&q=80" alt="Couple laughing candidly" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.parentElement.classList.add('bg-gradient-to-br','from-emerald-700','to-gold-500')">
+      </button>
+      <button class="reveal gallery-item group relative rounded-2xl overflow-hidden shadow-soft h-48" data-full="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=1200&q=80">
+        <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=600&q=80" alt="Couple in traditional attire" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.parentElement.classList.add('bg-gradient-to-br','from-burgundy-700','to-emerald-800')">
+      </button>
+      <button class="reveal gallery-item group relative rounded-2xl overflow-hidden shadow-soft h-48" data-full="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1200&q=80">
+        <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80" alt="Sunset portrait of the couple" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.parentElement.classList.add('bg-gradient-to-br','from-gold-600','to-emerald-900')">
+      </button>
+      <button class="reveal gallery-item col-span-2 group relative rounded-2xl overflow-hidden shadow-soft h-44" data-full="https://images.unsplash.com/photo-1509927083803-4bd519298ac4?w=1200&q=80">
+        <img src="https://images.unsplash.com/photo-1509927083803-4bd519298ac4?w=800&q=80" alt="Pre-wedding shoot outdoors" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.parentElement.classList.add('bg-gradient-to-br','from-emerald-700','to-burgundy-600')">
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/90 px-4" role="dialog" aria-modal="true" aria-label="Photo preview">
+  <button id="lightboxClose" aria-label="Close photo preview" class="absolute top-5 right-5 text-ivory/90 hover:text-gold-300">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <img id="lightboxImg" src="" alt="Enlarged wedding photo" class="max-h-[85vh] max-w-full rounded-lg shadow-2xl">
+</div>
+
+<!-- ============ 4. BLESSINGS & MESSAGES ============ -->
+<section id="blessings" class="relative bg-ivory py-20 px-6">
+  <div class="max-w-md mx-auto">
+    <p class="reveal text-center font-sans text-xs tracking-[0.25em] text-burgundy-600 mb-2">from our families to yours</p>
+    <h2 class="reveal font-serif text-3xl text-center text-ink mb-10">Heartfelt Blessings</h2>
+
+    <div class="space-y-5 mb-14">
+      <div class="reveal gold-frame rounded-2xl bg-white/60 p-5">
+        <p class="font-serif text-base leading-relaxed text-ink/85">
+          "Watching Arjun find someone who matches his laughter and calms his storms has been our
+          greatest joy. Meher, welcome to a family that already adores you."
+        </p>
+        <p class="mt-3 text-sm text-burgundy-600 font-medium">— Arjun's Parents</p>
+      </div>
+      <div class="reveal gold-frame rounded-2xl bg-white/60 p-5">
+        <p class="font-serif text-base leading-relaxed text-ink/85">
+          "Meher has always known her own mind — and her mind, and heart, chose Arjun.
+          We could not have hoped for a kinder son to call our own."
+        </p>
+        <p class="mt-3 text-sm text-burgundy-600 font-medium">— Meher's Parents</p>
+      </div>
+      <div class="reveal gold-frame rounded-2xl bg-emerald-900 text-ivory p-5">
+        <p class="font-serif text-base leading-relaxed text-ivory/90">
+          "To everyone who shaped us, teased us, and told us to just talk to each other already —
+          thank you. Come dance at our wedding."
+        </p>
+        <p class="mt-3 text-sm text-gold-300 font-medium">— Arjun &amp; Meher</p>
+      </div>
+    </div>
+
+    <!-- guest wishes -->
+    <div class="reveal">
+      <h3 class="font-serif text-xl text-center text-ink mb-4">Leave Us a Wish</h3>
+      <form id="wishForm" class="space-y-3 bg-white/60 gold-frame rounded-2xl p-5">
+        <div>
+          <label for="wishName" class="block text-xs tracking-wide text-ink/70 mb-1">Your name</label>
+          <input id="wishName" name="wishName" type="text" required maxlength="60"
+            class="w-full rounded-lg border border-ink/15 bg-ivory px-3 py-2 text-sm focus:border-gold-500" placeholder="e.g. Priya Nair">
+        </div>
+        <div>
+          <label for="wishMessage" class="block text-xs tracking-wide text-ink/70 mb-1">Your blessing</label>
+          <textarea id="wishMessage" name="wishMessage" required maxlength="240" rows="3"
+            class="w-full rounded-lg border border-ink/15 bg-ivory px-3 py-2 text-sm focus:border-gold-500" placeholder="Wishing you a lifetime of..."></textarea>
+        </div>
+        <button type="submit" class="w-full rounded-full bg-burgundy-600 text-ivory py-2.5 text-sm tracking-wide hover:bg-burgundy-700 transition">
+          Send Blessing
+        </button>
+        <p id="wishConfirm" class="text-xs text-emerald-700 text-center hidden">Thank you — your wish has been added below 💛</p>
+      </form>
+
+      <div id="wishList" class="mt-6 space-y-3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. VENUE & MAP ============ -->
+<section id="venue" class="relative bg-ivory py-20 px-6">
+  <div class="max-w-md mx-auto">
+    <p class="reveal text-center font-sans text-xs tracking-[0.25em] text-burgundy-600 mb-2">where to find us</p>
+    <h2 class="reveal font-serif text-3xl text-center text-ink mb-3">The Venue</h2>
+    <p class="reveal text-center font-serif text-lg text-emerald-800 mb-1">The Vermilion Palace &amp; Convention Hall</p>
+    <p class="reveal text-center text-sm text-ink/70 mb-8">142 Anna Salai, Alwarpet, Chennai, Tamil Nadu 600018</p>
+
+    <div class="reveal rounded-2xl overflow-hidden shadow-soft border border-gold-500/40 mb-6">
+      <iframe
+        title="Map to The Vermilion Palace & Convention Hall"
+        src="https://www.google.com/maps?q=142%20Anna%20Salai%2C%20Alwarpet%2C%20Chennai%2C%20Tamil%20Nadu%20600018&output=embed"
+        width="100%" height="260" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        class="w-full grayscale-[10%]"></iframe>
+    </div>
+
+    <div class="reveal grid grid-cols-1 gap-3">
+      <a href="https://www.google.com/maps/search/?api=1&query=The+Vermilion+Palace+Convention+Hall+Anna+Salai+Alwarpet+Chennai"
+        target="_blank" rel="noopener"
+        class="flex items-center justify-center gap-2 rounded-full bg-emerald-800 text-ivory py-3 text-sm tracking-wide hover:bg-emerald-700 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Open in Google Maps
+      </a>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=The+Vermilion+Palace+Convention+Hall+Anna+Salai+Alwarpet+Chennai"
+        target="_blank" rel="noopener"
+        class="flex items-center justify-center gap-2 rounded-full border border-emerald-800 text-emerald-800 py-3 text-sm tracking-wide hover:bg-emerald-800 hover:text-ivory transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l18-8-8 18-2-8-8-2Z"/></svg>
+        Get Directions
+      </a>
+      <a href="tel:+919876543210"
+        class="flex items-center justify-center gap-2 rounded-full border border-burgundy-600 text-burgundy-600 py-3 text-sm tracking-wide hover:bg-burgundy-600 hover:text-ivory transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 2 6a2 2 0 0 1 2-2Z"/></svg>
+        Call the Helpdesk
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. RSVP & FOOTER ============ -->
+<section id="rsvp" class="relative bg-emerald-900 text-ivory py-20 px-6">
+  <div class="max-w-md mx-auto">
+    <p class="reveal text-center font-sans text-xs tracking-[0.25em] text-gold-300 mb-2">will you join us?</p>
+    <h2 class="reveal font-serif text-3xl text-center mb-10">RSVP</h2>
+
+    <form id="rsvpForm" class="reveal space-y-4 gold-frame rounded-2xl bg-emerald-800/50 p-5">
+      <div>
+        <label for="rsvpName" class="block text-xs tracking-wide text-gold-300 mb-1">Full name</label>
+        <input id="rsvpName" required type="text" maxlength="60"
+          class="w-full rounded-lg bg-emerald-950/40 border border-gold-500/30 px-3 py-2 text-sm text-ivory placeholder:text-ivory/40 focus:border-gold-400" placeholder="Your name">
+      </div>
+
+      <div>
+        <span class="block text-xs tracking-wide text-gold-300 mb-1">Will you attend?</span>
+        <div class="grid grid-cols-2 gap-2">
+          <label class="flex items-center justify-center gap-2 rounded-lg border border-gold-500/30 py-2 text-sm cursor-pointer has-[:checked]:bg-gold-400 has-[:checked]:text-emerald-900">
+            <input type="radio" name="attending" value="Yes, joyfully!" class="hidden" checked> Joyfully, yes
+          </label>
+          <label class="flex items-center justify-center gap-2 rounded-lg border border-gold-500/30 py-2 text-sm cursor-pointer has-[:checked]:bg-gold-400 has-[:checked]:text-emerald-900">
+            <input type="radio" name="attending" value="Sadly, no" class="hidden"> Sadly, can't
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label for="rsvpGuests" class="block text-xs tracking-wide text-gold-300 mb-1">Number of guests (incl. you)</label>
+        <select id="rsvpGuests" class="w-full rounded-lg bg-emerald-950/40 border border-gold-500/30 px-3 py-2 text-sm text-ivory">
+          <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="rsvpDiet" class="block text-xs tracking-wide text-gold-300 mb-1">Dietary preference</label>
+        <select id="rsvpDiet" class="w-full rounded-lg bg-emerald-950/40 border border-gold-500/30 px-3 py-2 text-sm text-ivory">
+          <option>Vegetarian</option><option>Non-Vegetarian</option><option>Vegan</option><option>Jain</option><option>No preference</option>
+        </select>
+      </div>
+
+      <button type="submit"
+        class="w-full flex items-center justify-center gap-2 rounded-full bg-gold-400 text-emerald-900 py-3 text-sm font-medium tracking-wide hover:bg-gold-300 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.4L2 22l4.7-1.6a11 11 0 0 0 13.8-16.9Zm-8.4 16a9 9 0 0 1-4.6-1.3l-.3-.2-3 1 1-2.9-.2-.3A9 9 0 1 1 20 12a9 9 0 0 1-7.9 7.5Zm4.9-6.7c-.3-.1-1.6-.8-1.8-.9-.2-.1-.4-.1-.6.1s-.7.9-.9 1c-.2.2-.3.2-.6.1a7.3 7.3 0 0 1-2.1-1.3 8 8 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.3-.5s0-.4 0-.5-.6-1.5-.8-2c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.6 1 2.8.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/></svg>
+        Send RSVP via WhatsApp
+      </button>
+    </form>
+
+    <div class="reveal mt-14 text-center">
+      <p class="font-serif text-lg text-gold-300 mb-2">#MeherWedsArjun</p>
+      <div class="paisley-divider text-gold-500/60 mb-4"><span class="line"></span><span class="line reverse"></span></div>
+      <p class="text-xs text-ivory/60">With love, from two families becoming one.</p>
+      <p class="text-xs text-ivory/40 mt-3">© 2026 Arjun &amp; Meher. Made with love for our wedding day.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  // ---------- Preloader ----------
+  const preloader = document.getElementById('preloader');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let preloaderHidden = false;
+  function hidePreloader() {
+    if (preloaderHidden || !preloader) return;
+    preloaderHidden = true;
+    preloader.classList.add('loaded');
+    document.body.classList.remove('is-loading');
+    setTimeout(() => preloader.remove(), 750);
+  }
+  // Give the heart-draw + name animation time to play, then reveal the site.
+  // Also hides as soon as the page has fully loaded, whichever is later —
+  // capped so a slow connection never blocks the invitation for long.
+  const minDisplay = prefersReducedMotion ? 500 : 2200;
+  const maxDisplay = 4500;
+  let loaded = false;
+  window.addEventListener('load', () => { loaded = true; });
+  setTimeout(() => {
+    if (loaded || prefersReducedMotion) hidePreloader();
+    else window.addEventListener('load', hidePreloader, { once: true });
+  }, minDisplay);
+  setTimeout(hidePreloader, maxDisplay);
+
+  // ---------- Scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach((el) => io.observe(el));
+  } else {
+    revealEls.forEach((el) => el.classList.add('in-view'));
+  }
+
+  // ---------- Scroll progress bar ----------
+  const progress = document.getElementById('scrollProgress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progress.style.width = scrolled + '%';
+  }, { passive: true });
+
+  // ---------- Music toggle ----------
+  const audio = document.getElementById('bgAudio');
+  const musicBtn = document.getElementById('musicToggle');
+  const iconPlay = document.getElementById('iconPlay');
+  const iconPause = document.getElementById('iconPause');
+  let playing = false;
+  musicBtn.addEventListener('click', () => {
+    if (!playing) {
+      audio.play().then(() => {
+        playing = true;
+        iconPlay.classList.add('hidden');
+        iconPause.classList.remove('hidden');
+        musicBtn.setAttribute('aria-pressed', 'true');
+        musicBtn.setAttribute('aria-label', 'Pause background music');
+      }).catch(() => {
+        musicBtn.title = 'Add an audio file at audio/wedding-instrumental.mp3 to enable music';
+      });
+    } else {
+      audio.pause();
+      playing = false;
+      iconPlay.classList.remove('hidden');
+      iconPause.classList.add('hidden');
+      musicBtn.setAttribute('aria-pressed', 'false');
+      musicBtn.setAttribute('aria-label', 'Play background music');
+    }
+  });
+
+  // ---------- Countdown ----------
+  const weddingDate = new Date('2026-12-12T07:30:00+05:30').getTime();
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function updateCountdown() {
+    const now = Date.now();
+    const diff = weddingDate - now;
+    const els = {
+      d: document.getElementById('cd-days'),
+      h: document.getElementById('cd-hours'),
+      m: document.getElementById('cd-mins'),
+      s: document.getElementById('cd-secs'),
+    };
+    if (diff <= 0) {
+      els.d.textContent = els.h.textContent = els.m.textContent = els.s.textContent = '00';
+      return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const mins = Math.floor((diff / (1000 * 60)) % 60);
+    const secs = Math.floor((diff / 1000) % 60);
+    els.d.textContent = pad(days);
+    els.h.textContent = pad(hours);
+    els.m.textContent = pad(mins);
+    els.s.textContent = pad(secs);
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ---------- Add to Google Calendar ----------
+  function toGCalDate(iso) {
+    return iso.replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  }
+  const start = new Date('2026-12-12T07:30:00+05:30').toISOString();
+  const end = new Date('2026-12-12T10:30:00+05:30').toISOString();
+  const gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + '&text=' + encodeURIComponent("Arjun & Meher's Wedding — Muhurtham")
+    + '&dates=' + toGCalDate(start) + '/' + toGCalDate(end)
+    + '&details=' + encodeURIComponent('Join us for the Muhurtham ceremony as Arjun and Meher tie the knot.')
+    + '&location=' + encodeURIComponent('The Vermilion Palace & Convention Hall, 142 Anna Salai, Alwarpet, Chennai, Tamil Nadu 600018');
+  document.getElementById('gcalBtn').href = gcalUrl;
+
+  // ---------- Lightbox ----------
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  document.querySelectorAll('.gallery-item').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const full = btn.getAttribute('data-full');
+      const imgEl = btn.querySelector('img');
+      lightboxImg.src = full || (imgEl ? imgEl.src : '');
+      lightboxImg.alt = imgEl ? imgEl.alt : 'Enlarged wedding photo';
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLightbox() {
+    lightbox.classList.add('hidden');
+    lightbox.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+  // ---------- Guest wishes (localStorage) ----------
+  const WISH_KEY = 'weddingWishes_arjunMeher';
+  const wishForm = document.getElementById('wishForm');
+  const wishList = document.getElementById('wishList');
+  const wishConfirm = document.getElementById('wishConfirm');
+
+  function loadWishes() {
+    try {
+      return JSON.parse(localStorage.getItem(WISH_KEY) || '[]');
+    } catch (e) { return []; }
+  }
+  function saveWishes(list) {
+    try { localStorage.setItem(WISH_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+  function renderWishes() {
+    const wishes = loadWishes();
+    if (!wishes.length) {
+      wishList.innerHTML = '<p class="text-center text-xs text-ink/50">Be the first to leave a blessing.</p>';
+      return;
+    }
+    wishList.innerHTML = wishes.map((w) => `
+      <div class="rounded-xl border border-gold-500/30 bg-white/50 p-3">
+        <p class="text-sm text-ink/85 leading-relaxed">${escapeHtml(w.message)}</p>
+        <p class="text-xs text-burgundy-600 mt-1 font-medium">— ${escapeHtml(w.name)}</p>
+      </div>
+    `).join('');
+  }
+  renderWishes();
+
+  wishForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('wishName').value.trim();
+    const message = document.getElementById('wishMessage').value.trim();
+    if (!name || !message) return;
+    const wishes = loadWishes();
+    wishes.unshift({ name, message });
+    saveWishes(wishes);
+    renderWishes();
+    wishForm.reset();
+    wishConfirm.classList.remove('hidden');
+    setTimeout(() => wishConfirm.classList.add('hidden'), 3500);
+  });
+
+  // ---------- RSVP via WhatsApp ----------
+  const rsvpForm = document.getElementById('rsvpForm');
+  rsvpForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('rsvpName').value.trim();
+    const attending = rsvpForm.querySelector('input[name="attending"]:checked').value;
+    const guests = document.getElementById('rsvpGuests').value;
+    const diet = document.getElementById('rsvpDiet').value;
+    if (!name) return;
+
+    const message = `Hello! I'm RSVPing for Arjun & Meher's wedding.%0A`
+      + `Name: ${name}%0A`
+      + `Attending: ${attending}%0A`
+      + `Guests: ${guests}%0A`
+      + `Dietary preference: ${diet}`;
+
+    const whatsappNumber = '919876543210'; // coordinator's number — replace with the real one
+    const waUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+    window.open(waUrl, '_blank', 'noopener');
+  });
+})();
+</script>
+</body>
+</html>
